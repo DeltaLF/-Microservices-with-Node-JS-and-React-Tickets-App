@@ -7,6 +7,7 @@ export const errorHandler = (err:Error, req:Request, res:Response, next:NextFunc
         return res.status(err.statusCode).send({ errors: err.serializeErrors()})
     }
 
+    console.error("errorHandler catching ", err)
     // general error
     res.status(400).send({
         erros:[{ message:'something went wrong' }]
