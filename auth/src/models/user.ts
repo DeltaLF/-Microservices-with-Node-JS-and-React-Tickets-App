@@ -27,8 +27,20 @@ const userSchema = new mongoose.Schema({
     password:{
         type:String,
         required:true
+    }},
+    {
+    toJSON: {
+        // customize how to stringify json
+        transform(doc, ret){
+            // keep consistent cross all pods, dbs
+            ret.id = ret._id;
+            delete ret._id;
+            delete ret.password; // remove property (JS)
+            delete ret.__v;
+        }
     }
-})
+  }
+)
 
 const buildUser = (attrs: UserAttrs) => {
     // in order to do type check
