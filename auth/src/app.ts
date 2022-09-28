@@ -19,7 +19,7 @@ app.use(json())
 app.use(
     cookieSession({
         signed: false,
-        secure: true // cookie only be used while connecting with https
+        secure: process.env.NODE_ENV !== 'test' // cookie only be used while connecting with https
     })
 )
 
