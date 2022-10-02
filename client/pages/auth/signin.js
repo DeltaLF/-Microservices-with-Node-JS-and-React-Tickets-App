@@ -1,7 +1,7 @@
 import SignForm from "../../src/auth/signform";
 
 const Signin = () => {
-  return SignForm("in");
+  return SignForm({ method: "in" });
 };
 
 export default Signin;

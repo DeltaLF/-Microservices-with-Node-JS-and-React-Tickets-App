@@ -12,15 +12,18 @@ const useRequestHook = ({ url, method, body, onSuccess }) => {
       if (onSuccess) {
         onSuccess(response.data);
       }
+      console.log("response in useRequest hook", response);
       return response.data;
     } catch (err) {
+      console.log("err in useRequest hook", err);
       setErrors(
         <div className="alert alert-danger">
           <h4>Ooops....</h4>
           <ul className="my-0">
-            {err.response.data.errors.map((error) => (
-              <li key={error.message}> {error.message} </li>
-            ))}
+            {!!err?.response?.data?.errors &&
+              err.response.data.errors.map((error) => (
+                <li key={error.message}> {error.message} </li>
+              ))}
           </ul>
         </div>
       );
