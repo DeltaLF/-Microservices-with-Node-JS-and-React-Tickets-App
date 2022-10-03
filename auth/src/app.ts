@@ -1,7 +1,7 @@
 import express from 'express';
 import 'express-async-errors'
 import {json} from 'body-parser';
-
+import { errorHandler, NotFoundError } from '@tickets_dl/common';
 import cookieSession from "cookie-session"
 
 import {currentUserRouter} from "./routes/current-user"
@@ -9,8 +9,7 @@ import { signinRouter } from './routes/sigin';
 import { signoutRouter } from './routes/signout';
 import { signupRouter } from './routes/signup';
 
-import { errorHandler } from './middleware/error-handler';
-import { NotFoundError } from './errors/not-found-error';
+
 
 
 const app = express()
