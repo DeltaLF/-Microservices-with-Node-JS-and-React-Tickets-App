@@ -8,7 +8,7 @@ interface UserAttrs {
   password: string
 }
 
-// interface for properties taht a user model has
+// interface for properties that a user model has
 interface UserModel extends mongoose.Model<UserDoc> {
     build(attrs: UserAttrs): UserDoc
 }

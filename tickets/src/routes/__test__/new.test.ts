@@ -27,16 +27,54 @@ it('returns a status other than 401 if user is signed in ',async () => {
 })
 
 it('return an error if an invalid title is provided',async () => {
-  
+  // RequestValidationError is expected
+  await request(app)
+      .post('/api/tickets')
+      .set("Cookie", global.signin())
+      .send({
+        title: '',
+        price: 50
+      })
+      .expect(400);
 
+      await request(app)
+      .post('/api/tickets')
+      .set("Cookie", global.signin())
+      .send({
+        price: 50
+      })
+      .expect(400);
 })
 
 it('returns an error if an invalid price is proviced',async () => {
+  await request(app)
+  .post('/api/tickets')
+  .set("Cookie", global.signin())
+  .send({
+    title: 'valid title',
+    price: -50
+  })
+  .expect(400);
+
+  await request(app)
+  .post('/api/tickets')
+  .set("Cookie", global.signin())
+  .send({
+    title: 'valid title',
+  })
+  .expect(400);
   
 
 })
 
 it('creates a ticket with valid inputs',async () => {
-  
+  // after db is implemented, add in a check to make sure ticket was saved
+  await request(app)
+      .post('/api/tickets')
+      .send({
+        title:'test',
+        price:50
+      })
+      .expect(201);
 
 })
