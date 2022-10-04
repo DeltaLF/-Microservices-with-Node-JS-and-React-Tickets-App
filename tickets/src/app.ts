@@ -1,9 +1,9 @@
 import express from 'express';
 import 'express-async-errors'
 import {json} from 'body-parser';
-import { errorHandler, NotFoundError } from '@tickets_dl/common';
+import { errorHandler, NotFoundError, currentUser } from '@tickets_dl/common';
 import cookieSession from "cookie-session"
-
+import { createTicketRouter } from './routes/new';
 
 
 
@@ -16,8 +16,8 @@ app.use(
         secure: process.env.NODE_ENV !== 'test' // cookie only be used while connecting with https
     })
 )
-
-
+app.use(currentUser);
+app.use(createTicketRouter);
 
 app.all('*',async (req,res,next)=>{
    throw new NotFoundError()

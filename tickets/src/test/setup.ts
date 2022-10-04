@@ -2,6 +2,7 @@ import {MongoMemoryServer} from "mongodb-memory-server";
 import mongoose from "mongoose";
 import request from "supertest"
 import {app} from "../app";
+import jwt from 'jsonwebtoken';
 
 // so beforeAll and afterAll can share the mongo variable
 let mongo: any;
@@ -10,7 +11,7 @@ let mongo: any;
 declare global {
     namespace NodeJS{
         interface Global{
-            signin(): Promise<string[]>;
+            signin(): string[];
         }
     }
 }
@@ -41,17 +42,23 @@ afterAll(async ()=>{
 
 });
 
-global.signin = async () => {
-    const email = 'test@test.com';
-    const password = 'test';
+global.signin =  () => {
+    // bc we don't have signin route in ticket service
+    // we need to manually build a JWT payload
+    // {id, email}
+    const payload ={
+        id:'123',
+        email:"test@.test.com"
+    }
+    //Create the JWT
+    const token = jwt.sign(payload, process.env.JWT_KEY!)
+    // Build session Object: {jwt: my_jwt}
+    const session = {jwt: token}
+    // Trun the sesion object into JSON
+    const sessionJSON = JSON.stringify(session);
+    // Take JSON and encode it as base64
+    const base64session = Buffer.from(sessionJSON).toString('base64');
 
-    const response = await request(app)
-      .post('/api/users/signup')
-      .send({
-        email, password
-      })
-      .expect(201);
-    const cookie = response.get('Set-Cookie');
-
-    return cookie;
+    // return a string thats the cookie with encoded data
+    return [`session=${base64session}`];
 };
