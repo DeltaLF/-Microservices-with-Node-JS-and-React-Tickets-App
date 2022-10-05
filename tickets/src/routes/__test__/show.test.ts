@@ -1,9 +1,12 @@
 import request from 'supertest';
 import {app} from "../../app";
+import mongoose from 'mongoose';
 
 it('returns a 404 if the ticket is not found', async () => {
+    
+    const validId = new mongoose.Types.ObjectId().toHexString()
     const response = await request(app)
-        .get('/api/tickets/fakeId')
+        .get(`/api/tickets/${validId}`)
         .send()
         .expect(404);  
         // response 400 because we don't input a valid id

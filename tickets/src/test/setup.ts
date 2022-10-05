@@ -47,7 +47,8 @@ global.signin =  () => {
     // we need to manually build a JWT payload
     // {id, email}
     const payload ={
-        id:'123',
+        id: new mongoose.Types.ObjectId().toHexString(),
+        // so we can have mimic mutiple users
         email:"test@.test.com"
     }
     //Create the JWT
