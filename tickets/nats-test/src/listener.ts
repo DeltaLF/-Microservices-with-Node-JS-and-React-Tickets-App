@@ -17,9 +17,15 @@ stan.on('connect',()=>{
     });
 
     const options = stan.subscriptionOptions()
-      .setManualAckMode(true);  // anknowledge mode (queue only confrim the event is correctly processed after receive ack)
+      .setManualAckMode(true)  // anknowledge mode (queue only confrim the event is correctly processed after receive ack)
+      .setDeliverAllAvailable() // send all event history (in case listener is down)
+      // not practical to resend months years logs 
+      .setDurableName('orders-service'); // only send event with dubrable subscriptions 
+      // (setDeliverAllAvailable will ony be used for the first time)
     // queue distributes event to only one of listener to prevent duplicated handling 
-    const subscription = stan.subscribe('ticket:created', 'orders-service-queue-group', options); 
+    const subscription = stan.subscribe('ticket:created',
+        'queue-group-name', // make sure even temp disconnect durableName log will not be dumped
+        options); 
 
     subscription.on('message', (msg:Message)=>{ 
         const data = msg.getData();
