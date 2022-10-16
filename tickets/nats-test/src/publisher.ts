@@ -9,15 +9,16 @@ const stan = nats.connect('ticketing', 'abc',{
 });
 
 
-stan.on('connect', ()=>{
+stan.on('connect', async ()=>{
     console.log('Publisher connected to NATS!')
 
     const publisher = new TicketCreatePublisher(stan)
-    publisher.publish({
+    await publisher.publish({
         id:'123',
         title:'concert',
         price:100
     })
+    
     // // we can only share stream, raw data
     // const data = JSON.stringify({ 
     //     id:'123',
