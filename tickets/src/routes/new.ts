@@ -15,11 +15,15 @@ router.post('/api/tickets',requireAuth,[
     const {title, price} = req.body;
     const ticket = Ticket.build({title, price, userId:req.currentUser!.id })
     await ticket.save();
-    new TicketCreatedPublisher(natsWrapper.client).publish({
-        id: ticket.id,
+    console.log("# ticket",ticket,ticket.id,ticket._id)
+
+    const ticketCreatedPublisher =  new TicketCreatedPublisher(natsWrapper.client)
+    console.log("# subject",ticketCreatedPublisher.subject)
+    await ticketCreatedPublisher.publish({
+        id: ticket.id as string,
         title: ticket.title,
+        userId: ticket.userId,
         price: ticket.price,
-        userId: ticket.userId
     });
 
     res.status(201).send(ticket);

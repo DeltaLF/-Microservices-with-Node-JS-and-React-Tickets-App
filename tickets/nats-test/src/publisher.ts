@@ -1,5 +1,5 @@
 import nats,{Stan} from "node-nats-streaming";
-import { TicketCreatePublisher } from "./events/ticekt-created-publisher";
+import { TicketCreatePublisher } from "./events/ticket-created-publisher";
 
 // console.clear();
 
