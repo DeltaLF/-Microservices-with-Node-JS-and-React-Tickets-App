@@ -1,6 +1,7 @@
 import request from 'supertest';
 import {app} from "../../app";
 
+
 type TicketInit = { title:string, price:number}
 
 const createTicket = (payload:TicketInit) => {

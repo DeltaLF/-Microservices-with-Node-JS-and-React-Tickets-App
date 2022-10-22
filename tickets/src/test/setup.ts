@@ -4,6 +4,8 @@ import request from "supertest"
 import {app} from "../app";
 import jwt from 'jsonwebtoken';
 
+jest.mock('../nats-wrapper'); // all test file will use mock nats
+
 // so beforeAll and afterAll can share the mongo variable
 let mongo: any;
 
