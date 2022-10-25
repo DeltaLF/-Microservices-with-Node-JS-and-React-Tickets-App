@@ -32,7 +32,7 @@ build:
         manual:
           - src: "src/**/*.ts"
             dest: .
-    - image: deltalf/orders_app_tickets
+    - image: deltalf/tickets_app_orders
       context: orders
       docker:
         dockerfile: Dockerfile
