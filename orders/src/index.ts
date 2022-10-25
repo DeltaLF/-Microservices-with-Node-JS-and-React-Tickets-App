@@ -40,7 +40,7 @@ const start = async()=>{
     }
 
     app.listen(3000,()=>{
-        console.log("auth server is running on port 3000!")
+        console.log("order server is running on port 3000!")
     })   
    
 }

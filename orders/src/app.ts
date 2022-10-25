@@ -3,12 +3,10 @@ import 'express-async-errors'
 import {json} from 'body-parser';
 import { errorHandler, NotFoundError, currentUser } from '@tickets_dl/common';
 import cookieSession from "cookie-session"
-import { createTicketRouter } from './routes/new';
-import { showTicketRouter } from './routes/show';
-import { indexTicketRouter } from './routes';
-import { updateTicketsRouter } from './routes/update';
-
-
+import { indexOrderRouter } from './routes';
+import { deleteOrderRouter } from './routes/delete';
+import { showOrderRouter } from './routes/show';
+import { newOrderRouter } from './routes/new';
 
 const app = express()
 app.set('trust proxy',true) // to pass ingress proxy
@@ -20,10 +18,10 @@ app.use(
     })
 )
 app.use(currentUser);
-app.use(createTicketRouter);
-app.use(showTicketRouter);
-app.use(indexTicketRouter);
-app.use(updateTicketsRouter);
+app.use(indexOrderRouter);
+app.use(deleteOrderRouter);
+app.use(showOrderRouter);
+app.use(newOrderRouter);
 
 app.all('*',async (req,res,next)=>{
    throw new NotFoundError()
