@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { OrderStatus } from "@tickets_dl/common";
 
 // to make sure all the services share the same status 
 // Orders, Expiration, Payments
@@ -7,7 +8,7 @@ import mongoose from "mongoose";
 // properties required to create an Order
 interface OrderAttrs{
     userId: string;
-    status: string; 
+    status: OrderStatus; 
     expiresAt: Date;
     ticket: TicketDoc; // instance of Ticket
 }
@@ -15,7 +16,7 @@ interface OrderAttrs{
 // all properties an Order has
 interface OrderDoc extends mongoose.Document{
     userId: string;
-    status: string; 
+    status: OrderStatus; 
     expiresAt: Date;
     ticket: TicketDoc; // instance of Ticket
 }
@@ -31,7 +32,9 @@ const orderSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        required: true
+        required: true,
+        enum: Object.values(OrderStatus),
+        default: OrderStatus.Created // default value
     },
     expiresAt: {
         type: mongoose.Schema.Types.Date 
