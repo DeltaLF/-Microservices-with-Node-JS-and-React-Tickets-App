@@ -19,6 +19,9 @@ const start = async()=>{
     if(!process.env.NATS_CLUSTER_ID ){
         throw new Error('NATS_CLUSTER_ID must be defined');
     }
+    if(!process.env.ORDER_EXPIRATION_WINDOW_SECONDS){
+        throw new Error('ORDER_EXPIRATION_WINDOW_SECONDS must be defined')
+    }
     // the connection is actually across pod 
     try{
         // ticketing came from nats.depl.yaml arg cid

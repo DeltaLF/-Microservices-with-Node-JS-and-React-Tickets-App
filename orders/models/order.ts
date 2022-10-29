@@ -2,6 +2,9 @@ import mongoose from "mongoose";
 import { OrderStatus } from "@tickets_dl/common";
 import { TicketDoc } from "./ticket";
 
+// since most of the files in order service need this 
+export { OrderStatus };
+
 // to make sure all the services share the same status 
 // Orders, Expiration, Payments
 // enum Status {pending = 'pending', finish = 'finish', failed:'failed'}
@@ -53,10 +56,12 @@ const orderSchema = new mongoose.Schema({
     }
 });
 
+
+
+const Order = mongoose.model<OrderDoc,OrderModel>('Order', orderSchema);
+
 orderSchema.statics.build = (attrs:OrderAttrs) => {
     return new Order(attrs);
 }
-
-const Order = mongoose.model<OrderDoc,OrderModel>('Order', orderSchema);
 
 export {Order};

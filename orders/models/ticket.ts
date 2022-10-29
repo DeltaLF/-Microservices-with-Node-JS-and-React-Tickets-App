@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { Order, OrderStatus } from "./order";
 
 /*
   We shouldn't resue the ticket model inside tickets srervice 
@@ -13,6 +14,7 @@ interface TicketAttrs {
 export interface TicketDoc extends mongoose.Document{
     price: number;
     title: string;
+    isReserved(): Promise<boolean>;
 }
 
 interface TicketModel extends mongoose.Model<TicketDoc>{
@@ -38,10 +40,29 @@ const ticketSchema = new mongoose.Schema({
     }
 })
 
-const Ticket = mongoose.model<TicketDoc, TicketModel>('Ticket', ticketSchema)
-
+// statics: function on the schema(class)
 ticketSchema.statics.build = (attrs:TicketAttrs) => {
     return new Ticket(attrs);
 }
+
+// methods: function on the instance
+ticketSchema.methods.isReserved = async function() {
+    // this === the ticket document taht just called 'isReserved' method
+    const existingOrder = await Order.findOne({
+        ticket: this,
+        status: {
+            $in: [
+                OrderStatus.AwaitingPayment, 
+                OrderStatus.Complete,
+                OrderStatus.Created
+            ]
+        }
+    })
+    return !!existingOrder;
+}
+
+
+const Ticket = mongoose.model<TicketDoc, TicketModel>('Ticket', ticketSchema)
+
 
 export { Ticket };
