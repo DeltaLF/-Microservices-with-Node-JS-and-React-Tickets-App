@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { OrderStatus } from "@tickets_dl/common";
+import { TicketDoc } from "./ticket";
 
 // to make sure all the services share the same status 
 // Orders, Expiration, Payments
