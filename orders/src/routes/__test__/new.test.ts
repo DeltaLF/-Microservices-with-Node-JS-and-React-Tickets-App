@@ -89,4 +89,17 @@ it('reserves a ticket', async () =>{
 
 });
 
-it.todo(' emits an order created event')
+it(' emits an order created event after reserves a ticket',async() =>{
+  const ticket = Ticket.build({
+    title: 'test',
+    price: 100
+  })
+  await ticket.save();
+
+  await request(app)
+    .post('/api/orders')
+    .set('Cookie',global.signin())
+    .send({ticketId: ticket.id})
+    .expect(201);
+  expect(natsWrapper.client.publish).toHaveBeenCalled();
+})

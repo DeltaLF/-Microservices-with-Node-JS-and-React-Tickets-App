@@ -3,6 +3,8 @@ import { BadRequestError, NotFoundError, OrderStatus, requireAuth, validateReque
 import {body} from "express-validator";
 import { Ticket } from "../../models/ticket";
 import { Order } from "../../models/order";
+import { OrderCreatedPublisher } from "../events/publishers/order-created-publisher";
+import { natsWrapper } from "../nats-wrapper";
 
 const router = express.Router();
 
@@ -44,6 +46,19 @@ router.post('/api/orders',requireAuth,[
     await order.save();
     // publish an event saying that an order was created
     // (need to implement order-created-evnet in common module)
+    const orderCreatedPublisher = new OrderCreatedPublisher(natsWrapper.client);
+    await orderCreatedPublisher.publish({
+        id: order.id,
+        status: order.status,
+        userId:order.userId,
+        expiresAt: order.expiresAt.toISOString(),
+        ticket:{
+            id:order.ticket.id,
+            price:order.ticket.price
+        }
+
+    })
+
 
     res.status(201).send(order);
 })

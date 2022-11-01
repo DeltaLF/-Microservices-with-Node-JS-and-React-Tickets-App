@@ -4,6 +4,7 @@ import request from 'supertest';
 import {app} from "../../app";
 import { Order, OrderStatus } from '../../../models/order';
 import { Ticket } from '../../../models/ticket';
+import { natsWrapper } from '../../nats-wrapper';
 
 it('has fetching individual orders and working post order',async()=>{
     const user = global.signin();
@@ -42,4 +43,28 @@ it('has fetching individual orders and working post order',async()=>{
 
 });
 
-it.todo('emits an order cancelled event');
+it('emits an order cancelled event',async () =>{
+  const user = global.signin();
+  // created ticket
+  const ticket = Ticket.build({
+      title: 'test',
+      price:100
+    })
+    await ticket.save();
+  // create order
+  const response = await request(app)
+    .post('/api/orders')
+    .set('Cookie',user)
+    .send({ticketId: ticket.id})
+    .expect(201);
+  
+  const {id: orderId} = response.body;
+  
+  // delete order
+  await request(app)
+    .delete(`/api/orders/${orderId}`)
+    .set('Cookie',user)
+    .send({})
+    .expect(204);
+  expect(natsWrapper.client.publish).toHaveBeenCalled();
+});
