@@ -7,6 +7,7 @@ import { Order, OrderStatus } from "./order";
 */
 
 interface TicketAttrs {
+    id: string;
     price: number;
     title: string;
 }
@@ -42,7 +43,12 @@ const ticketSchema = new mongoose.Schema({
 
 // statics: function on the schema(class)
 ticketSchema.statics.build = (attrs:TicketAttrs) => {
-    return new Ticket(attrs);
+    // to make sure ticket id is consistent accross services
+    return new Ticket({
+        _id: attrs.id,
+        title: attrs.title,
+        price: attrs.price
+    });
 }
 
 // methods: function on the instance
