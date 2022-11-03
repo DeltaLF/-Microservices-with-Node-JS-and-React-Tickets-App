@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import {updateIfCurrentPlugin} from "mongoose-update-if-current";
 
 // data to create a ticket
 interface TicketsAttrs  {
@@ -12,6 +13,7 @@ interface TicketsDoc extends mongoose.Document {
     title:string,
     price: number,
     userId: string,
+    version: number, // solution of concurrency
 }
 
 interface TicketModel extends mongoose.Model<TicketsDoc>{
@@ -37,7 +39,9 @@ const ticketSchema = new mongoose.Schema({
     }}
 })
 
-
+// solution for concurrency issue
+ticketSchema.set('versionKey','version');  // use version instead of __v as version record property
+ticketSchema.plugin(updateIfCurrentPlugin);
 
 ticketSchema.statics.build = (attrs: TicketsAttrs) => {
     return new Ticket(attrs)
