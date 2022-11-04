@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import {updateIfCurrentPlugin} from "mongoose-update-if-current";
 import { Order, OrderStatus } from "./order";
 
 /*
@@ -40,6 +41,9 @@ const ticketSchema = new mongoose.Schema({
         },
     }
 })
+
+ticketSchema.set('versionKey', 'version');
+ticketSchema.plugin(updateIfCurrentPlugin);
 
 // statics: function on the schema(class)
 ticketSchema.statics.build = (attrs:TicketAttrs) => {
