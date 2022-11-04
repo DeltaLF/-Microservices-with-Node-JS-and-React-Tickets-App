@@ -49,6 +49,7 @@ router.post('/api/orders',requireAuth,[
     const orderCreatedPublisher = new OrderCreatedPublisher(natsWrapper.client);
     await orderCreatedPublisher.publish({
         id: order.id,
+        version: order.version,
         status: order.status,
         userId:order.userId,
         expiresAt: order.expiresAt.toISOString(),

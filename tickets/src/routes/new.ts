@@ -21,6 +21,7 @@ router.post('/api/tickets',requireAuth,[
     console.log("# subject",ticketCreatedPublisher.subject)
     await ticketCreatedPublisher.publish({
         id: ticket.id as string,
+        version: ticket.version,
         title: ticket.title,
         userId: ticket.userId,
         price: ticket.price,

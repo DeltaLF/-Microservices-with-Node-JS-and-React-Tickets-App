@@ -20,6 +20,7 @@ interface OrderAttrs{
 // all properties an Order has
 interface OrderDoc extends mongoose.Document{
     userId: string;
+    version:number;
     status: OrderStatus; 
     expiresAt: Date;
     ticket: TicketDoc; // instance of Ticket
