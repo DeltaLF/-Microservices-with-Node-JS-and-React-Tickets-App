@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import {updateIfCurrentPlugin} from "mongoose-update-if-current";
 
 // data to create a ticket
-interface TicketsAttrs  {
+export interface TicketsAttrs  {
     title:string,
     price: number,
     userId: string
