@@ -3,7 +3,7 @@ import { TicketCreatedListener } from "../ticket-created-listener";
 import { natsWrapper } from "../../../nats-wrapper";
 import { TicketCreatedEvent } from "@tickets_dl/common";
 import mongoose from "mongoose";
-import { Ticket } from "../../../../models/ticket";
+import { Ticket } from "../../../models/ticket";
 
 const createdTicketListenerSetup = async () => {
 

@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import request from "supertest";
 import { app } from "../../app";
-import { Ticket } from "../../../models/ticket";
+import { Ticket } from "../../models/ticket";
 
 it('has fetching individual orders with invalid id',async()=>{
     const inValidId = "invalidId"
@@ -25,6 +25,7 @@ it('has fetching individual orders and working post order',async()=>{
     const user = global.signin();
     // created ticket
     const ticket = Ticket.build({
+        id: new mongoose.Types.ObjectId().toHexString(),
         title: 'test',
         price:100
       })
@@ -52,6 +53,7 @@ it('fail if the user is different',async()=>{
     const userTwo = global.signin();
     // created ticket
     const ticket = Ticket.build({
+        id: new mongoose.Types.ObjectId().toHexString(),
         title: 'test',
         price:100
       })

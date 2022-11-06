@@ -1,6 +1,6 @@
 import express,{Request, Response} from "express";
 import { requireAuth } from "@tickets_dl/common";
-import { Order } from "../../models/order";
+import { Order } from "../models/order";
 
 
 const router = express.Router();

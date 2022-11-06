@@ -1,8 +1,8 @@
 import mongoose from 'mongoose';
 import request from 'supertest';
 import {app} from "../../app";
-import { Order, OrderStatus } from '../../../models/order';
-import { Ticket } from '../../../models/ticket';
+import { Order, OrderStatus } from '../../models/order';
+import { Ticket } from '../../models/ticket';
 
 it('has a route handler listenting to /api/orders for get reqeust',async () => {
     const response = await request(app)
@@ -14,6 +14,7 @@ it('has a route handler listenting to /api/orders for get reqeust',async () => {
 
   const buildTicket = async () => {
     const ticket = Ticket.build({
+        id: new mongoose.Types.ObjectId().toHexString(),
         title: 'test',
         price:1000
     });

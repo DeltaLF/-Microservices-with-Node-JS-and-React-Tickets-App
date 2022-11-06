@@ -2,14 +2,15 @@
 import mongoose from 'mongoose';
 import request from 'supertest';
 import {app} from "../../app";
-import { Order, OrderStatus } from '../../../models/order';
-import { Ticket } from '../../../models/ticket';
+import { Order, OrderStatus } from '../../models/order';
+import { Ticket } from '../../models/ticket';
 import { natsWrapper } from '../../nats-wrapper';
 
 it('has fetching individual orders and working post order',async()=>{
     const user = global.signin();
     // created ticket
     const ticket = Ticket.build({
+        id: new mongoose.Types.ObjectId().toHexString(),
         title: 'test',
         price:100
       })
@@ -47,6 +48,7 @@ it('emits an order cancelled event',async () =>{
   const user = global.signin();
   // created ticket
   const ticket = Ticket.build({
+      id: new mongoose.Types.ObjectId().toHexString(),
       title: 'test',
       price:100
     })

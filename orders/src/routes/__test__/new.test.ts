@@ -1,8 +1,8 @@
 import mongoose from 'mongoose';
 import request from 'supertest';
 import {app} from "../../app";
-import { Order, OrderStatus } from '../../../models/order';
-import { Ticket } from '../../../models/ticket';
+import { Order, OrderStatus } from '../../models/order';
+import { Ticket } from '../../models/ticket';
 import {natsWrapper } from "../../nats-wrapper";
 // jest.mock('../../nats-wrapper'); // redirect the import to the __mocks__
 
@@ -54,6 +54,7 @@ it('return a not found error if ticket id does not passed',async () => {
 
 it('returns an error if the ticket is already reserved',async ()=>{
   const ticket = Ticket.build({
+    id: new mongoose.Types.ObjectId().toHexString(),
     title: 'test',
     price:100
   })
@@ -76,6 +77,7 @@ it('returns an error if the ticket is already reserved',async ()=>{
 
 it('reserves a ticket', async () =>{
   const ticket = Ticket.build({
+    id: new mongoose.Types.ObjectId().toHexString(),
     title: 'test',
     price: 100
   })
@@ -91,6 +93,7 @@ it('reserves a ticket', async () =>{
 
 it(' emits an order created event after reserves a ticket',async() =>{
   const ticket = Ticket.build({
+    id: new mongoose.Types.ObjectId().toHexString(),
     title: 'test',
     price: 100
   })
