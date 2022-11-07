@@ -1,6 +1,8 @@
 import mongoose from 'mongoose'
 import {app} from "./app"
 import { natsWrapper } from './nats-wrapper';
+import { OrderCreatedListener } from './events/listener/order-created-listner';
+import { OrderCancelledListener } from './events/listener/order-cancelled-listener';
 
 const start = async()=>{
 
@@ -32,6 +34,10 @@ const start = async()=>{
         });
         process.on('SIGINT',()=>natsWrapper.client.close());
         process.on('SIGTERM',()=>natsWrapper.client.close());
+
+        // init event linsteners
+        new OrderCancelledListener(natsWrapper.client).listen();
+        new OrderCreatedListener(natsWrapper.client).listen();
 
         await mongoose.connect(process.env.MONGO_URI)
         console.log("Connected to Mongodb")
