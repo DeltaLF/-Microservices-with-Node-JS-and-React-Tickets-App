@@ -13,7 +13,7 @@ let mongo: any;
 declare global {
     namespace NodeJS{
         interface Global{
-            signin(): string[];
+            signin(id?: string): string[];
         }
     }
 }
@@ -45,12 +45,12 @@ afterAll(async ()=>{
 
 });
 
-global.signin =  () => {
+global.signin =  (id?: string) => {
     // bc we don't have signin route in ticket service
     // we need to manually build a JWT payload
     // {id, email}
     const payload ={
-        id: new mongoose.Types.ObjectId().toHexString(),
+        id: id || new mongoose.Types.ObjectId().toHexString(),
         // so we can have mimic mutiple users
         email:"test@.test.com"
     }
@@ -66,3 +66,4 @@ global.signin =  () => {
     // return a string thats the cookie with encoded data
     return [`session=${base64session}`];
 };
+
