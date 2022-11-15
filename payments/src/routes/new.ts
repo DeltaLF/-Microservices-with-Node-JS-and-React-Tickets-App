@@ -2,6 +2,7 @@ import express, {Request, Response} from "express";
 import {body} from "express-validator";
 import { requireAuth, validateRequest, BadRequestError, NotFoundError, NotAuthorizedError, OrderStatus } from "@tickets_dl/common";
 import { Order } from "../models/order";
+import { stripe } from "../stripe";
 
 const router = express.Router();
 
@@ -23,7 +24,14 @@ validateRequest,
         throw new BadRequestError('Cannot pay for an cancelled order')
     }
 
-    res.send({success: true});
+    // handle payments
+    await stripe.charges.create({
+        currency: 'usd',
+        amount: order.price * 100, // cents
+        source: token
+    });
+
+    res.status(201).send({success: true});
 })
 
 
