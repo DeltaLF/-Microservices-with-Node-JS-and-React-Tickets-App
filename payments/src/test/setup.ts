@@ -6,6 +6,9 @@ import jwt from 'jsonwebtoken';
 
 jest.mock('../nats-wrapper'); // all test file will use mock nats
 
+// add variable in system
+process.env.STRIPE_KEY = process.env.UDEMY_MICRO_SERVICES_STRIPE_SECRET;
+
 // so beforeAll and afterAll can share the mongo variable
 let mongo: any;
 

@@ -5,7 +5,7 @@ import { app } from "../../app";
 import { Order } from "../../models/order";
 import {stripe} from "../../stripe"
 
-jest.mock('../../stripe.ts');
+ // jest.mock('../../stripe.ts'); // if added -> jest will use the mock instance in __mocks__
 
 it('shows not authorize error',async()=>{
     await request(app)
@@ -178,15 +178,15 @@ it('returns a 400 when purchasing a cancelled order',async()=>{
 
 });
 
-it('returns a 204 with valid input', async() => {
+it('returns a 201 with valid input', async() => {
   const userId = new mongoose.Types.ObjectId().toHexString();
-  const cookie = await global.signin(userId);
+  const price = Math.floor(Math.random() * 100000) // random generates unique price so we can identify it in  the stripe retrive charges API
   const order = Order.build({
       id: new mongoose.Types.ObjectId().toHexString(),
       status: OrderStatus.Created,
       userId: userId,
       version: 0,
-      price: 100
+      price: price
   });
   await order.save();
   await request(app)
@@ -197,10 +197,14 @@ it('returns a 204 with valid input', async() => {
       orderId: order.id
     })
     .expect(201);
+
+    const stripeCharges = await stripe.charges.list({ limit:30 });
     
-    const chargeOptions = (stripe.charges.create as jest.Mock).mock.calls[0][0];
-    expect(chargeOptions.source).toEqual('tok_visa');
-    expect(chargeOptions.amount).toEqual(order.price * 100);
-    expect(chargeOptions.currency).toEqual('usd');
+    const stripeCharge = stripeCharges.data.find(charge => {
+      // use random generated price to identify the order
+      return charge.amount === price * 100;
+    })
+    expect(stripeCharge).toBeDefined;
+    expect(stripeCharge!.currency).toEqual('usd');
 
 });
