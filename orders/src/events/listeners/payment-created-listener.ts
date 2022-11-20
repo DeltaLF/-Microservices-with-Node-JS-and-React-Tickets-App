@@ -13,7 +13,8 @@ export class PaymentCreatedListener extends Listener<PaymentCreatedEvent>{
         }
         order.set({status: OrderStatus.Complete});
         await order.save();
-        // should emit a order updated event to make version correct
+        // should emit an order updated event to make version correct
+        // but here the order will not changed after complete
         msg.ack();
     }
 }
