@@ -4,6 +4,8 @@ import { requireAuth, validateRequest, BadRequestError, NotFoundError, NotAuthor
 import { Order } from "../models/order";
 import { stripe } from "../stripe";
 import { Payment } from "../models/payment";
+import { PaymentCreatedPubliser } from "../events/publishers/payment-created-publisher";
+import { natsWrapper } from "../nats-wrapper";
 
 const router = express.Router();
 
@@ -39,8 +41,14 @@ validateRequest,
         stripeId: charge.id
     })
     await payment.save();
+    const paymentCreatedPublisher = new PaymentCreatedPubliser(natsWrapper.client);
+    await paymentCreatedPublisher.publish({
+        id: payment.id,
+        stripeId: charge.id,
+        orderId: orderId
+    })
 
-    res.status(201).send({success: true});
+    res.status(201).send({success: true, id: payment.id});
 })
 
 

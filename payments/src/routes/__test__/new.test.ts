@@ -4,6 +4,7 @@ import request from "supertest";
 import { app } from "../../app";
 import { Order } from "../../models/order";
 import { Payment } from "../../models/payment";
+import { natsWrapper } from "../../nats-wrapper";
 import {stripe} from "../../stripe"
 
  // jest.mock('../../stripe.ts'); // if added -> jest will use the mock instance in __mocks__
@@ -179,7 +180,7 @@ it('returns a 400 when purchasing a cancelled order',async()=>{
 
 });
 
-it('returns a 201 with valid input', async() => {
+it('returns a 201 with valid input, payment created, payment created event is published', async() => {
   const userId = new mongoose.Types.ObjectId().toHexString();
   const price = Math.floor(Math.random() * 100000) // random generates unique price so we can identify it in  the stripe retrive charges API
   const order = Order.build({
@@ -209,5 +210,5 @@ it('returns a 201 with valid input', async() => {
     expect(stripeCharge!.currency).toEqual('usd');
     const payment = await Payment.findOne({stripeId: stripeCharge.id, orderId: order.id});
     expect(payment).not.toBeNull();
-
+    expect(natsWrapper.client.publish).toHaveBeenCalled();
 });
