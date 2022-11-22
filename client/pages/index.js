@@ -1,9 +1,16 @@
+import Link from "next/link";
+
 const HomePage = ({ tickets }) => {
   const ticketList = tickets.map((ticket) => {
     return (
       <tr key={ticket.id}>
         <td>{ticket.title}</td>
         <td>{ticket.price}</td>
+        <td>
+          <Link href="/tickets/[ticketId]" as={`/tickets/${ticket.id}`}>
+            <a>view</a>
+          </Link>
+        </td>
       </tr>
     );
   });
@@ -15,6 +22,7 @@ const HomePage = ({ tickets }) => {
           <tr>
             <th>Titke</th>
             <th>Price</th>
+            <th>Link</th>
           </tr>
         </thead>
         <tbody>{ticketList}</tbody>
