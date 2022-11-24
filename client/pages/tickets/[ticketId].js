@@ -16,7 +16,13 @@ const TicketShow = ({ ticket }) => {
       <h1>{ticket.title}</h1>
       <h4>Price: {ticket.price}</h4>
       {errors}
-      <button onClick={doRequest} className="btn btn-primary">
+      <button
+        onClick={() => {
+          // to prevent event parameter passed into doRequest
+          doRequest();
+        }}
+        className="btn btn-primary"
+      >
         Purchase
       </button>
     </div>

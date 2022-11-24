@@ -5,10 +5,10 @@ const useRequestHook = ({ url, method, body, onSuccess }) => {
   // method = 'get' | 'post' | 'patch'
   const [errors, setErrors] = useState(null);
 
-  const doRequest = async () => {
+  const doRequest = async (params = {}) => {
     try {
       setErrors(null);
-      const response = await axios[method](url, body);
+      const response = await axios[method](url, { ...body, ...params });
       if (onSuccess) {
         onSuccess(response.data);
       }
