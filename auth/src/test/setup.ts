@@ -39,7 +39,7 @@ afterAll(async ()=>{
     }
     await mongoose.connection.close();
 
-});
+},5000);
 
 global.signin = async () => {
     const email = 'test@test.com';
