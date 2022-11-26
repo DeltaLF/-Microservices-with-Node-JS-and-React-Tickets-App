@@ -16,7 +16,8 @@ it('responds with details about the current user',async () => {
       .post('/api/users/currentuser')
       .set('Cookie',cookie) // we need to manually append cookie
       .send()
-      .expect(200);
+      // .expect(200);
+      .expect(400); // make test fail to test ci
 
       console.log(response.body)
 
