@@ -23,7 +23,7 @@ declare global {
 
 beforeAll( async () => {
     process.env.JWT_KEY = 'randomValue';
-    const mongo = await MongoMemoryServer.create();
+    mongo = await MongoMemoryServer.create();
     const mongoUri = await mongo.getUri();
 
     await mongoose.connect(mongoUri,{})
@@ -41,12 +41,18 @@ beforeEach( async()=>{
 });
 
 afterAll(async ()=>{
-    if(mongo){
-        await mongo.stop();
-    }
-    await mongoose.connection.close();
+    await new Promise<void>(resolve=>{
+        // give more time for test then close the mongoose connection
+        setTimeout(async ()=>{
+            if(mongo){
+                await mongo.stop();
+            }
+            await mongoose.connection.close();
+            resolve()
+        },10000)
+    })
 
-});
+},15000);
 
 global.signin =  (id?: string) => {
     // bc we don't have signin route in ticket service

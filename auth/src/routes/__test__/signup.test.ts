@@ -3,13 +3,15 @@ import {app} from "../../app";
 
 it('returns a 201 on successful signup', async() => {
     // send with valided email, password in payload
-    return request(app)
+    await  request(app)
     .post('/api/users/signup')
     .send({
         email: 'test@test.com',
         password: 'test'
     })
     .expect(201);
+
+    
 });
 
 it('returns a 400 with an invalid email', async()=>{

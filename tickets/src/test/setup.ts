@@ -38,12 +38,18 @@ beforeEach( async()=>{
 });
 
 afterAll(async ()=>{
-    if(mongo){
-        await mongo.stop();
-    }
-    await mongoose.connection.close();
+    await new Promise<void>(resolve=>{
+        // give more time for test then close the mongoose connection
+        setTimeout(async ()=>{
+            if(mongo){
+                await mongo.stop();
+            }
+            await mongoose.connection.close();
+            resolve()
+        },10000)
+    })
 
-});
+},15000);
 
 global.signin =  () => {
     // bc we don't have signin route in ticket service
