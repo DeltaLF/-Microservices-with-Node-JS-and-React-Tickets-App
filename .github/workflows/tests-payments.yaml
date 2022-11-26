@@ -1,4 +1,7 @@
 name: tests-payments
+env:
+  UDEMY_MICRO_SERVICES_STRIPE_SECRET: ${{ secrets.STRIPE_PUBLIC_KEY }}
+
 
 #when to run
 on:
