@@ -3,7 +3,9 @@ name: tests-order
 #when to run
 on:
   pull_request
-  
+    paths:
+      - 'orders/**'
+
 # what to do when events tirggered
 jobs:
   build:

@@ -3,6 +3,8 @@ name: tests-tickets
 #when to run
 on:
   pull_request
+    paths:
+      - 'tickets/**'
   
 # what to do when events tirggered
 jobs:

@@ -1,9 +1,11 @@
 name: tests-auth
 
-#when to run
+#when to run: only run test for corresponding service updating
 on:
-  pull_request
-  
+  pull_request:
+    paths:
+      - "auth/**"
+
 # what to do when events tirggered
 jobs:
   build:

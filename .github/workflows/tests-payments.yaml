@@ -6,6 +6,8 @@ env:
 #when to run
 on:
   pull_request
+    paths:
+      - 'payments/**'
   
 # what to do when events tirggered
 jobs:
