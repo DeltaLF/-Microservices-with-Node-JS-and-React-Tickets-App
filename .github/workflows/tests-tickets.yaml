@@ -2,7 +2,7 @@ name: tests-tickets
 
 #when to run
 on:
-  pull_request
+  pull_request:
     paths:
       - 'tickets/**'
   
